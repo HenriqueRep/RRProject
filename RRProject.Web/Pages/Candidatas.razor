@@ -1,0 +1,38 @@
+﻿@page "/candidatas"
+@inject ICandidataService candidataService
+
+@if (Candidates == null)
+{
+    <h3>Carregando lista de candidatas</h3>
+}
+else
+{
+    <h3 class="mb-5">Candidatas</h3>
+    @if (Candidates.Count() > 0)
+    {
+        <div class="row mt-3">
+            @foreach(var cand in Candidates)
+            {
+                <div class="col-md-3 mb-2">
+                    <a href="/CandidataDetalhes/@cand.Id">
+                        <div class="card" style="width: 18rem;">
+                            <img src="@cand.ImagemUrl" class="card-img-top" style="width: 100%; height: 250px; object-fit: cover;" alt="...">
+                            <div class="card-body">
+                                <h5 class="card-title">@cand.Clube</h5>
+                                <p class="card-text">@cand.Nome</p>                              
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            }            
+        </div>
+        
+    }
+}
+@code {
+    public IEnumerable<CandidataDto>? Candidates { get; set; }
+    protected override async Task OnInitializedAsync()
+    {
+        Candidates = await candidataService.GetCandidates();
+    }
+}
