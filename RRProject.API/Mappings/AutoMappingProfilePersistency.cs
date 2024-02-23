@@ -8,10 +8,14 @@ namespace RRProject.API.Mappings
     {
         public AutoMappingProfilePersistency()
         {
-            CreateMap<Usuario, UsuarioDto>().ReverseMap();  
+            CreateMap<UsuarioCadastroRequest, UsuarioCadastroRequestDto>().ReverseMap();
+            CreateMap<UsuarioCadastroResponse, UsuarioCadastroResponseDto>().ReverseMap();
+            CreateMap<UsuarioLoginRequest, UsuarioLoginRequestDto>().ReverseMap();
+            CreateMap<UsuarioLoginResponse, UsuarioLoginResponseDto>().ReverseMap();
+            CreateMap<UsuarioLogoutResponse, UsuarioLogoutResponseDto>().ReverseMap();
             CreateMap<Candidata, CandidataDto>().ReverseMap();
+            CreateMap<AvaliacaoUsuario, AvaliacaoUsuarioDto>().ReverseMap();
         }
-
     }
 }
 

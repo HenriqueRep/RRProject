@@ -1,5 +1,4 @@
-﻿
-namespace RRProject.Models.DTOs
+﻿namespace RRProject.Models.DTOs
 {
     public class CandidataDto
     {
@@ -11,7 +10,8 @@ namespace RRProject.Models.DTOs
         public int Fantasia { get; set; }
         public int Apresentacao { get; set; }
         public int Total { get; set; }
-        public string ImagemUrl { get; set; }
+        public string ImagemUrlclube { get; set; }
+        public string ImagemUrlcandidata { get; set; }
 
     }
 }

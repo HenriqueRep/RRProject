@@ -1,0 +1,74 @@
+﻿@page "/"
+@using RRProject.Models.DTOs
+
+@inject ILoginService loginService
+@inject NavigationManager navigationManager
+@inject Microsoft.JSInterop.IJSRuntime JSRuntime
+
+<h3>Login</h3>
+
+@if (Usuario == null)
+{
+    <div class="alert alert-danger" role="alert" style="display: @ErrorMessageDisplay">
+        @ErrorMessage
+    </div>
+
+    <input type="text" @bind="loginModel.Usuario" placeholder="Usuario" />
+    <br />
+    <input type="password" @bind="loginModel.Senha" placeholder="Password" />
+    <br />
+    <button @onclick="HandleLogin">Login</button>
+    <br />
+    <p>Se você não tem uma conta, <a href="/cadastro">clique aqui</a> para cadastrar.</p>
+}
+else
+{
+    <p>Você já está logado</p>
+}
+
+@code { 
+    private UsuarioLoginRequestDto loginModel = new UsuarioLoginRequestDto();
+    private bool IsAuthenticated = false;
+    private string ErrorMessage = "";
+    private string ErrorMessageDisplay = "none";
+
+    private async Task HandleLogin()
+    {
+        var login = await loginService.Login(loginModel);
+        if (login.Sucesso == true)
+        {
+            IsAuthenticated = true;
+            await CarregarUsuario();            
+            navigationManager.NavigateTo("/clubes", forceLoad:true);
+        }
+        else
+        {
+            IsAuthenticated = false;
+            ErrorMessage = "Falha no login, verifique novamente seus dados!";
+            ErrorMessageDisplay = "block";
+        }
+    }
+    public UsuarioLoginResponseDto Usuario { get; set; }
+   
+    private async Task CarregarUsuario()
+    {
+        // Recupere os itens do localStorage usando JavaScript interop
+        var id = await JSRuntime.InvokeAsync<string>("localStorage.getItem", "id");
+        var usuario = await JSRuntime.InvokeAsync<string>("localStorage.getItem", "usuario");
+
+        if (!string.IsNullOrEmpty(id) && !string.IsNullOrEmpty(usuario))
+        {
+            // Se os itens forem encontrados, crie um objeto UsuarioLoginResponseDto
+            Usuario = new UsuarioLoginResponseDto
+                {
+                    ID = id,
+                    Usuario = usuario
+                };
+        }
+        else
+        {
+            // Se algum item estiver faltando, talvez você queira redirecionar o usuário para fazer login novamente
+            // ou exibir uma mensagem de erro
+        }
+    }
+}

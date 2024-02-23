@@ -1,4 +1,10 @@
 ﻿@page "/CandidataDetalhes/{Id:int}"
+@using RRProject.Models.DTOs
+@using Microsoft.AspNetCore.Authorization
+@using System.IdentityModel.Tokens.Jwt
+@using Microsoft.IdentityModel.Logging
+
+@inject Microsoft.JSInterop.IJSRuntime JSRuntime
 
 @if (Candidata is null && MensagemErro is null)
 {
@@ -10,32 +16,120 @@ else if (MensagemErro is not null)
 }
 else
 {
-    <h3 class="mb-5">Detalhes da Candidata</h3>
-    <div class="row">
-        <div class="col-md-6 mb-4">
-            <img class="img-fluid" src="@Candidata.ImagemUrl">
-        </div>
-        <div class="col-md-6">
-            <h3>@Candidata.Nome</h3>
-            <p class="mb-4">@Candidata.Clube</p>
+    <div class="candidata-container">
+        <img class="candidata-imagem" src="@Candidata.ImagemUrlcandidata" alt="Foto da candidata">
+        <div class="candidata-info">
+            <h2>@Candidata.Nome</h2>
+            <p>@Candidata.Clube</p>
         </div>
     </div>
-
 }
+
+<div>
+    <h3>Selecione as notas para os quesitos:</h3>
+    <form @onsubmit="SalvarAvaliacao">
+        <div class="mb-3">
+            <label for="beautyScore" class="form-label">Beleza:</label>
+            <select id="beautyScore" class="form-select" @bind="AvaliacaoUsuario.NotaBeleza">
+                @for (int i = 1; i <= 10; i++)
+                {
+                    <option value="@i">@i</option>
+                }
+            </select>
+        </div>
+        <div class="mb-3">
+            <label for="fantasyScore" class="form-label">Fantasia:</label>
+            <select id="fantasyScore" class="form-select" @bind="AvaliacaoUsuario.NotaFantasia">
+                @for (int i = 1; i <= 10; i++)
+                {
+                    <option value="@i">@i</option>
+                }
+            </select>
+        </div>
+        <div class="mb-3">
+            <label for="presentationScore" class="form-label">Apresentação:</label>
+            <select id="presentationScore" class="form-select" @bind="AvaliacaoUsuario.NotaApresentacao">
+                @for (int i = 1; i <= 10; i++)
+                {
+                    <option value="@i">@i</option>
+                }
+            </select>
+        </div>
+        <div class="mb-3">
+            <label for="comments" class="form-label">Comentário:</label>
+            <textarea id="comments" class="form-control" rows="3" @bind="AvaliacaoUsuario.Comentario"></textarea>
+        </div>
+        <div class="d-flex justify-content-between">
+            <button type="submit" class="btn btn-primary">Enviar</button>
+            <a href="/clubes" class="btn btn-secondary">Cancelar</a>
+        </div>
+    </form>
+</div>
 
 @code {
     [Inject]
-    public ICandidataService? CandidataService { get; set; }
+    public ICandidataService CandidataService { get; set; }
+    [Inject]
+    public IAvaliacaoUsuarioService AvaliacaoUsuarioService { get; set; }
+    [Inject]
+    public NavigationManager NavigationManager { get; set; }
+    public CandidataDto Candidata { get; set; }
     [Parameter]
     public int Id { get; set; }
-    public CandidataDto? Candidata { get; set; }
-    public string? MensagemErro { get; set; }
+    public string MensagemErro { get; set; }
+
+    public UsuarioLoginResponseDto Usuario { get; set; }
+    public AvaliacaoUsuarioDto AvaliacaoUsuario { get; set; } = new AvaliacaoUsuarioDto();
 
     protected override async Task OnInitializedAsync()
     {
         try
         {
             Candidata = await CandidataService.GetCandidatebyID(Id);
+            await CarregarUsuario();
+        }
+        catch (Exception ex)
+        {
+            MensagemErro = ex.Message;
+        }
+    }
+
+    private async Task CarregarUsuario()
+    {
+        var id = await JSRuntime.InvokeAsync<string>("localStorage.getItem", "id");
+        var usuario = await JSRuntime.InvokeAsync<string>("localStorage.getItem", "usuario");
+
+        if (!string.IsNullOrEmpty(id) && !string.IsNullOrEmpty(usuario))
+        {
+            Usuario = new UsuarioLoginResponseDto
+                {
+                    ID = id,
+                    Usuario = usuario
+                };
+        }
+        else
+        {
+            // Se algum item estiver faltando, talvez você queira redirecionar o usuário para fazer login novamente
+            // ou exibir uma mensagem de erro
+        }
+    }
+
+    private async Task SalvarAvaliacao()
+    {
+        try
+        {
+            // Defina a CandidataId e o UsuarioId com base nos dados disponíveis
+            AvaliacaoUsuario.CandidataIdenti = Candidata.Id;
+            AvaliacaoUsuario.UsuarioIdenti = Usuario.ID;
+
+            // Chame o serviço para salvar a avaliação
+            await AvaliacaoUsuarioService.SalvarAvaliacao(AvaliacaoUsuario);
+
+            // Limpe os dados da avaliação após o salvamento bem-sucedido
+            AvaliacaoUsuario = new AvaliacaoUsuarioDto();
+
+            // Após salvar a avaliação, redirecione o usuário para a página de clubes
+            NavigationManager.NavigateTo("/clubes");
         }
         catch (Exception ex)
         {
@@ -43,3 +137,4 @@ else
         }
     }
 }
+

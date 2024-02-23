@@ -1,0 +1,77 @@
+﻿@page "/clubes"
+@using RRProject.Models.DTOs
+@using Microsoft.AspNetCore.Authorization
+@using System.IdentityModel.Tokens.Jwt
+@using Microsoft.IdentityModel.Logging
+
+@inject ICandidataService CandidataService
+@inject IAvaliacaoUsuarioService AvaliacaoUsuarioService
+@inject Microsoft.JSInterop.IJSRuntime JSRuntime
+
+@if (Clube == null)
+{
+    <h3>Carregando lista de candidatas</h3>
+}
+else
+{
+    <h1>Olá! @Usuario.Usuario. Selecione um clube abaixo</h1>  
+    @if (Clube.Count() > 0)
+    {
+        <div class="row mt-3">
+            @foreach (var club in Clube)
+            {
+                var jaVotou = idvotos.Contains(club.Id);
+                if (!jaVotou)
+                {
+                    <div class="col-md-3 col-6 mb-2">
+                        <a href="/CandidataDetalhes/@club.Id" class="card-link">
+                            <div class="card h-100">
+                                <div class="card-img-container">
+                                    <img src="@club.ImagemUrlclube" class="card-img-top" alt="...">
+                                </div>
+                                <div class="card-body">
+                                    <h5 class="card-title">@club.Clube</h5>
+                                    <p class="card-text">@club.Nome</p>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                }
+            }
+        </div>
+    }
+}
+@code {
+    public IEnumerable<CandidataDto>? Clube { get; set; }
+    public UsuarioLoginResponseDto Usuario { get; set; }
+    public List<int> idvotos { get; set; } = new List<int>();
+
+    protected override async Task OnInitializedAsync()
+    {
+        Clube = await CandidataService.GetCandidates();
+        await CarregarUsuario();
+        idvotos = await AvaliacaoUsuarioService.VerificarVoto(Usuario.ID);
+    }
+
+    private async Task CarregarUsuario()
+    {
+        // Recupere os itens do localStorage usando JavaScript interop
+        var id = await JSRuntime.InvokeAsync<string>("localStorage.getItem", "id");
+        var usuario = await JSRuntime.InvokeAsync<string>("localStorage.getItem", "usuario");
+
+        if (!string.IsNullOrEmpty(id) && !string.IsNullOrEmpty(usuario))
+        {
+            // Se os itens forem encontrados, crie um objeto UsuarioLoginResponseDto
+            Usuario = new UsuarioLoginResponseDto
+                {
+                    ID = id,
+                    Usuario = usuario
+                };
+        }
+        else
+        {
+            // Se algum item estiver faltando, talvez você queira redirecionar o usuário para fazer login novamente
+            // ou exibir uma mensagem de erro
+        }
+    }
+}

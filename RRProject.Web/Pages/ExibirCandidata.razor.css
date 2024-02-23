@@ -1,0 +1,28 @@
+﻿
+.candidata-container {
+    display: flex;
+    align-items: center;
+}
+
+.candidata-imagem {
+    width: 150px; /* Ajuste conforme necessário */
+    height: auto; /* Para manter a proporção da imagem */
+    margin-right: 25px; /* Espaço entre a imagem e o texto */
+    margin-left: -55px; /* Distância da margem esquerda */
+    max-width: 40%; /* Largura máxima para a imagem */
+
+}
+
+.candidata-info {
+    flex-grow: 1; /* Para ocupar o espaço restante */
+}
+
+    .candidata-info h2 {
+        margin-top: 0; /* Remover margem superior do título */
+        margin-bottom: 5px; /* Espaçamento entre o título e o clube */
+    }
+
+    .candidata-info p {
+        margin-top: 0; /* Remover margem superior do parágrafo */
+        font-style: italic; /* Estilo do clube */
+    }

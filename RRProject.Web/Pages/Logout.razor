@@ -1,0 +1,23 @@
+﻿@page "/logout"
+@using Microsoft.AspNetCore.Components.Forms
+
+@inject NavigationManager NavigationManager
+<h3>Você tem certeza que deseja sair?</h3>
+
+<div class="form-group">
+    <button class="btn btn-primary" @onclick="FazerLogout">Sim, sair</button>
+    <a href="/clubes" class="btn btn-secondary">Cancelar</a>
+</div>
+
+@code {
+    // Injeção de dependência do serviço de login
+    [Inject]
+    public ILoginService LoginService { get; set; }
+
+    // Método para logout
+    private async Task FazerLogout()
+    {
+        await LoginService.Logout();
+        NavigationManager.NavigateTo("/", forceLoad: true);
+    }
+}

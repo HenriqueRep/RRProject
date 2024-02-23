@@ -1,6 +1,8 @@
-﻿<div class="top-row ps-3 navbar navbar-dark">
+﻿@inject Microsoft.JSInterop.IJSRuntime JSRuntime
+
+<div class="top-row ps-3 navbar navbar-dark">
     <div class="container-fluid">
-        <a class="navbar-brand" href="">Rainha das Rainhas 2024</a>
+        <a class="navbar-brand" <p>Rainha das Rainhas 2024</p></a>
         <button title="Navigation menu" class="navbar-toggler" @onclick="ToggleNavMenu">
             <span class="navbar-toggler-icon"></span>
         </button>
@@ -9,25 +11,42 @@
 
 <div class="@NavMenuCssClass nav-scrollable" @onclick="ToggleNavMenu">
     <nav class="flex-column">
-        <div class="nav-item px-3">
-            <NavLink class="nav-link" href="" Match="NavLinkMatch.All">
-                <span class="bi bi-house-door-fill-nav-menu" aria-hidden="true"></span> Home
+        @if (Usuario != null && !string.IsNullOrEmpty(Usuario.ID))
+        {           
+            <div class="nav-item px-3">
+                <NavLink class="nav-link" href="clubes">
+                    <span class="icon-c-square" aria-hidden="true"></span> Clubes
+                </NavLink>
+            </div>
+            <div class="nav-item px-3">
+                <NavLink class="nav-link" href="ClassificacaoIndividual">
+                <span class="icon-person" aria-hidden="true"></span> Classif. Individual
             </NavLink>
         </div>
+        }
         <div class="nav-item px-3">
-            <NavLink class="nav-link" href="Candidatas">
-                <span class="bi bi-layout-text-sidebar" aria-hidden="true"></span> Candidatas
+            <NavLink class="nav-link" href="ClassificacaoGeral">
+                <span class="icon-people"></span> Classif. Comunidade
             </NavLink>
         </div>
-        <div class="nav-item px-3">
-            <NavLink class="nav-link" href="Classificar">
-                <span class="bi bi-layout-text-sidebar" aria-hidden="true"></span> Classificar
-            </NavLink>
-        </div>
+        @*@<div class="nav-item px-3">
+        <NavLink class="nav-link" href="ClassificacaoIndividualPorUsuario">
+        <span class="icon-people"></span> Classif. Juradas(os)
+        </NavLink>
+        </div>*@
+        @if (Usuario != null && !string.IsNullOrEmpty(Usuario.ID))
+        {
+            <div class="nav-item px-3">
+                <NavLink class="nav-link" href="logout">
+                    <span class="icon-person-x" aria-hidden="true"></span> Sair
+                </NavLink>
+            </div>
+        }
     </nav>
 </div>
 
 @code {
+    public UsuarioLoginResponseDto Usuario { get; set; }
     private bool collapseNavMenu = true;
 
     private string? NavMenuCssClass => collapseNavMenu ? "collapse" : null;
@@ -35,5 +54,32 @@
     private void ToggleNavMenu()
     {
         collapseNavMenu = !collapseNavMenu;
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        await CarregarUsuario();       
+    }
+
+    private async Task CarregarUsuario()
+    {
+        // Recupere os itens do localStorage usando JavaScript interop
+        var id = await JSRuntime.InvokeAsync<string>("localStorage.getItem", "id");
+        var usuario = await JSRuntime.InvokeAsync<string>("localStorage.getItem", "usuario");
+               
+        if (!string.IsNullOrEmpty(id) && !string.IsNullOrEmpty(usuario))
+        {
+            // Se os itens forem encontrados, crie um objeto UsuarioLoginResponseDto
+            Usuario = new UsuarioLoginResponseDto
+                {
+                    ID = id,
+                    Usuario = usuario
+                };
+        }
+        else
+        {
+            // Se algum item estiver faltando, talvez você queira redirecionar o usuário para fazer login novamente
+            // ou exibir uma mensagem de erro
+        }
     }
 }

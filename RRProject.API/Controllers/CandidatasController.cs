@@ -1,8 +1,7 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using RRProject.API.Entities;
 using RRProject.API.Interfaces;
-using RRProject.API.Repositories;
 using RRProject.Models.DTOs;
 
 namespace RRProject.API.Controllers
@@ -19,7 +18,8 @@ namespace RRProject.API.Controllers
             _candidataRepository = candidataRepository;
             _mapper = mapper;
         }
-       
+
+        
         [HttpGet("{id:int}")]
         public async Task<ActionResult<CandidataDto>> GetCandidate(int id)
         {

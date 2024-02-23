@@ -16,10 +16,41 @@ namespace RRProject.API.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "8.0.1")
+                .HasAnnotation("ProductVersion", "8.0.2")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
+
+            modelBuilder.Entity("RRProject.API.Entities.AvaliacaoUsuario", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("CandidataIdenti")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Comentario")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("NotaApresentacao")
+                        .HasColumnType("int");
+
+                    b.Property<int>("NotaBeleza")
+                        .HasColumnType("int");
+
+                    b.Property<int>("NotaFantasia")
+                        .HasColumnType("int");
+
+                    b.Property<string>("UsuarioIdenti")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Avaliacao");
+                });
 
             modelBuilder.Entity("RRProject.API.Entities.Candidata", b =>
                 {
@@ -29,32 +60,17 @@ namespace RRProject.API.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("Apresentacao")
-                        .HasColumnType("int");
-
-                    b.Property<int>("Beleza")
-                        .HasColumnType("int");
-
                     b.Property<string>("Clube")
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Comentario")
-                        .HasMaxLength(150)
-                        .HasColumnType("nvarchar(150)");
+                    b.Property<string>("ImagemUrlcandidata")
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("Fantasia")
-                        .HasColumnType("int");
-
-                    b.Property<string>("ImagemUrl")
+                    b.Property<string>("ImagemUrlclube")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Nome")
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
-
-                    b.Property<int>("Total")
-                        .HasColumnType("int");
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
@@ -64,134 +80,107 @@ namespace RRProject.API.Migrations
                         new
                         {
                             Id = 1,
-                            Apresentacao = 0,
-                            Beleza = 0,
-                            Clube = "Paysandu",
-                            Fantasia = 0,
-                            ImagemUrl = "/Imagens/Candidatas/Paysandu.png",
-                            Nome = "Rayane Furtado",
-                            Total = 0
+                            Clube = "Assembleia Paraense",
+                            ImagemUrlcandidata = "/Imagens/Candidatas/assembleia.png",
+                            ImagemUrlclube = "/Imagens/Clubes/assembleia.png",
+                            Nome = "Fernanda Costa"
                         },
                         new
                         {
                             Id = 2,
-                            Apresentacao = 0,
-                            Beleza = 0,
-                            Clube = "Grêmio Literário e Recreativo Português",
-                            Fantasia = 0,
-                            ImagemUrl = "/Imagens/Candidatas/Grêmio Literário e Recreativo Português.png",
-                            Nome = "Giovanna Cristinne Silva Picanço",
-                            Total = 0
+                            Clube = "Bancrévea",
+                            ImagemUrlcandidata = "/Imagens/Candidatas/bancrevea.png",
+                            ImagemUrlclube = "/Imagens/Clubes/bancrevea.png",
+                            Nome = "Vitorya Carolyne"
                         },
                         new
                         {
                             Id = 3,
-                            Apresentacao = 0,
-                            Beleza = 0,
-                            Clube = "Assembleia Paraense",
-                            Fantasia = 0,
-                            ImagemUrl = "/Imagens/Candidatas/Assembléia Paraense.png",
-                            Nome = "Isadora Andrade Rêgo",
-                            Total = 0
+                            Clube = "Casota",
+                            ImagemUrlcandidata = "/Imagens/Candidatas/casota.png",
+                            ImagemUrlclube = "/Imagens/Clubes/casota.png",
+                            Nome = "Letícia Moraes"
                         },
                         new
                         {
                             Id = 4,
-                            Apresentacao = 0,
-                            Beleza = 0,
-                            Clube = "Bancrévea",
-                            Fantasia = 0,
-                            ImagemUrl = "/Imagens/Candidatas/Bancrévea.png",
-                            Nome = "Érica Venise da Silva Pinto",
-                            Total = 0
+                            Clube = "Cassazum",
+                            ImagemUrlcandidata = "/Imagens/Candidatas/cassazum.png",
+                            ImagemUrlclube = "/Imagens/Clubes/cassazum.png",
+                            Nome = "Natália Leão"
                         },
                         new
                         {
                             Id = 5,
-                            Apresentacao = 0,
-                            Beleza = 0,
-                            Clube = "Guará Acqua Park",
-                            Fantasia = 0,
-                            ImagemUrl = "/Imagens/Candidatas/Guará Acqua Park.png",
-                            Nome = "Aline Carla Rodrigues Wanderley",
-                            Total = 0
+                            Clube = "Clube de Engenharia",
+                            ImagemUrlcandidata = "/Imagens/Candidatas/engenharia.png",
+                            ImagemUrlclube = "/Imagens/Clubes/engenharia.png",
+                            Nome = "Heloysa Rodrigues"
                         },
                         new
                         {
                             Id = 6,
-                            Apresentacao = 0,
-                            Beleza = 0,
-                            Clube = "ASALP",
-                            Fantasia = 0,
-                            ImagemUrl = "/Imagens/Candidatas/ASALP.png",
-                            Nome = "Ádria Mayara Pantoja Nogueira",
-                            Total = 0
+                            Clube = "Clube do Remo",
+                            ImagemUrlcandidata = "/Imagens/Candidatas/remo.png",
+                            ImagemUrlclube = "/Imagens/Clubes/remo.png",
+                            Nome = "Gabrielle Costa"
                         },
                         new
                         {
                             Id = 7,
-                            Apresentacao = 0,
-                            Beleza = 0,
-                            Clube = "Tuna Luso Brasileira ",
-                            Fantasia = 0,
-                            ImagemUrl = "/Imagens/Candidatas/Tuna Luso Brasileira.png",
-                            Nome = "Janaína Pontes Ferreira",
-                            Total = 0
+                            Clube = "Clube dos Advogado",
+                            ImagemUrlcandidata = "/Imagens/Candidatas/oab.png",
+                            ImagemUrlclube = "/Imagens/Clubes/oab.png",
+                            Nome = "Lídia Negrão"
                         },
                         new
                         {
                             Id = 8,
-                            Apresentacao = 0,
-                            Beleza = 0,
-                            Clube = "Tênis Clube do Pará",
-                            Fantasia = 0,
-                            ImagemUrl = "/Imagens/Candidatas/Tênis Clube.png",
-                            Nome = "Ana de Nazaré Martins Barbosa",
-                            Total = 0
+                            Clube = "Grêmio Português ",
+                            ImagemUrlcandidata = "/Imagens/Candidatas/gremio.png",
+                            ImagemUrlclube = "/Imagens/Clubes/gremio.png",
+                            Nome = "Ana Karina"
                         },
                         new
                         {
                             Id = 9,
-                            Apresentacao = 0,
-                            Beleza = 0,
-                            Clube = "Clube do Remo",
-                            Fantasia = 0,
-                            ImagemUrl = "/Imagens/Candidatas/Clube do Remo.png",
-                            Nome = "Adriana dos Santos Pinheiro",
-                            Total = 0
+                            Clube = "Acqua Park",
+                            ImagemUrlcandidata = "/Imagens/Candidatas/guara.png",
+                            ImagemUrlclube = "/Imagens/Clubes/guara.png",
+                            Nome = "Giselly Geise"
                         },
                         new
                         {
                             Id = 10,
-                            Apresentacao = 0,
-                            Beleza = 0,
-                            Clube = "Iate Clube de Santarém",
-                            Fantasia = 0,
-                            ImagemUrl = "/Imagens/Candidatas/Iate Clube de Santarém.png",
-                            Nome = "Monã Rita Vianna de Oliveira",
-                            Total = 0
+                            Clube = "Pará Clube",
+                            ImagemUrlcandidata = "/Imagens/Candidatas/clubepara.png",
+                            ImagemUrlclube = "/Imagens/Clubes/clubepara.png",
+                            Nome = "Evelyn Moreira"
+                        },
+                        new
+                        {
+                            Id = 11,
+                            Clube = "Paysandu",
+                            ImagemUrlcandidata = "/Imagens/Candidatas/paysandu.png",
+                            ImagemUrlclube = "/Imagens/Clubes/paysandu.png",
+                            Nome = "Tais Malato"
+                        },
+                        new
+                        {
+                            Id = 12,
+                            Clube = "Tênis Clube",
+                            ImagemUrlcandidata = "/Imagens/Candidatas/tenis.png",
+                            ImagemUrlclube = "/Imagens/Clubes/tenis.png",
+                            Nome = "Ana Maria Marques"
+                        },
+                        new
+                        {
+                            Id = 13,
+                            Clube = "Tuna Luso",
+                            ImagemUrlcandidata = "/Imagens/Candidatas/tuna.png",
+                            ImagemUrlclube = "/Imagens/Clubes/tuna.png",
+                            Nome = "Ingrid Kácia"
                         });
-                });
-
-            modelBuilder.Entity("RRProject.API.Entities.Usuario", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("Nome")
-                        .HasMaxLength(30)
-                        .HasColumnType("nvarchar(30)");
-
-                    b.Property<string>("Senha")
-                        .HasMaxLength(30)
-                        .HasColumnType("nvarchar(30)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Usuarios");
                 });
 #pragma warning restore 612, 618
         }

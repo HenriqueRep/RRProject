@@ -1,0 +1,39 @@
+﻿/* styles.css */
+
+/* Estilos para os cards */
+.card {
+    width: 10rem;
+    border: 2px solid #007bff; /* Aumenta a largura da borda e define a cor azul */
+    border-radius: 8px; /* Adiciona bordas arredondadas */
+    transition: border-color 0.3s ease; /* Adiciona uma transição suave para a cor da borda */
+    background-image: linear-gradient(90deg, rgba(237,207,147,1) 0%, rgba(247,231,208,1) 35%, rgba(241,210,155,1) 100%); /* Define um gradiente de cores */
+}
+    .card:hover {
+        border-color: #0056b3
+    }
+
+/* Estilos para o contêiner de imagem do card */
+.card-img-container {
+    text-align: center;
+}
+
+/* Estilos para a imagem do card */
+.card-img-top {
+    max-width: 100%; /* Garante que a imagem não ultrapasse a largura do contêiner */
+    height: 150px; /* Define uma altura fixa para a imagem */
+    object-fit: cover; /* Redimensiona a imagem para preencher o contêiner mantendo sua proporção */
+}
+
+/* Estilos para o corpo do card */
+.card-body {
+    text-align: center;
+}
+
+/* Estilos para o título e texto do card */
+.card-title,
+.card-text {
+    margin-bottom: 1; /* Remove a margem inferior padrão */
+    font-family: Arial, sans-serif; /* Define a fonte da família Arial ou a fonte sans-serif padrão */
+    font-size: 1rem; /* Define o tamanho da fonte */
+    color: #333; /* Define a cor do texto */
+}

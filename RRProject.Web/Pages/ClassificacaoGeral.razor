@@ -1,0 +1,88 @@
+﻿@page "/ClassificacaoGeral"
+@using RRProject.Models.DTOs
+@inject ICandidataService CandidataService
+@inject IAvaliacaoUsuarioService AvaliacaoUsuarioService
+@inject Microsoft.JSInterop.IJSRuntime JSRuntime
+
+<h3>Classificação Geral de Candidatas</h3>
+<link href="styles.css" rel="stylesheet" />
+
+<div class="table-responsive">
+    <table class="cinereousTable">
+        <thead>
+            <tr>
+                <th>Nome</th>
+                <th>Bele</th>
+                <th>Fanta</th>
+                <th>Aprese</th>
+                <th>Total</th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (Candidatas != null && Candidatas.Any())
+            {
+                @foreach (var candidata in Candidatas.OrderByDescending(c => GetTotalVotos(c.Id)))
+                {
+                    <tr>
+                        <td>@candidata.Nome</td>
+                        <td>@GetTotalAvaliacao(candidata.Id, "Beleza")</td>
+                        <td>@GetTotalAvaliacao(candidata.Id, "Fantasia")</td>
+                        <td>@GetTotalAvaliacao(candidata.Id, "Apresentacao")</td>
+                        <td>@GetTotalAvaliacao(candidata.Id, "TotalVotos")</td>
+                    </tr>
+                }
+            }
+            else
+            {
+                <tr>
+                    <td colspan="5">Nenhuma candidata encontrada.</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+@code {
+    public IEnumerable<CandidataDto> Candidatas { get; set; }
+    public List<AvaliacaoUsuarioDto> Avaliacoes { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        // Obter candidatas
+        Candidatas = await CandidataService.GetCandidates();
+
+        // Obter todas as avaliações de todos os usuários
+        Avaliacoes = await AvaliacaoUsuarioService.GetAllAvaliacoes();
+    }
+
+    private int GetTotalAvaliacao(int candidataId, string tipoAvaliacao)
+    {
+        if (tipoAvaliacao == "TotalVotos")
+        {
+            var avaliacoesCandidata = Avaliacoes.Where(a => a.CandidataIdenti == candidataId);
+
+            // Calcular o total de votos somando os valores de TotalVotos de cada avaliação
+            return avaliacoesCandidata.Sum(a => a.TotalVotos);
+        }
+        else
+        {
+            return Avaliacoes.Where(a => a.CandidataIdenti == candidataId).Sum(a => tipoAvaliacao == "Beleza" ? a.NotaBeleza :
+                                        tipoAvaliacao == "Fantasia" ? a.NotaFantasia :
+                                        tipoAvaliacao == "Apresentacao" ? a.NotaApresentacao : 0);
+        }
+    }
+    private int GetTotalVotos(int candidataId)
+    {
+        // Certifique-se de que Avaliacoes está devidamente populado
+        if (Avaliacoes == null)
+        {
+            throw new InvalidOperationException("A lista de avaliações não foi carregada.");
+        }
+
+        // Filtrar as avaliações para a candidata com o ID fornecido
+        var avaliacoesCandidata = Avaliacoes.Where(a => a.CandidataIdenti == candidataId);
+
+        // Calcular o total de votos somando os valores de TotalVotos de cada avaliação
+        return avaliacoesCandidata.Sum(a => a.TotalVotos);
+    }
+}

@@ -1,0 +1,87 @@
+﻿@page "/ClassificacaoIndividualPorUsuario"
+@inject ICandidataService CandidataService
+@inject IAvaliacaoUsuarioService AvaliacaoUsuarioService
+@inject ILoginService loginService
+
+<h3>Classificação Individual por Usuário</h3>
+
+<div class="form-group">
+    <label for="selectUsuario">Selecione o usuário:</label>
+    <select class="form-control" id="selectUsuario" @onchange="ChangeUser">
+        @foreach (var user in Usuarios)
+        {
+            <option value="@user">@user</option>
+        }
+    </select>
+</div>
+
+@if (Candidatas != null && Candidatas.Any())
+{
+    <div class="table-responsive">
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>Nome</th>
+                    <th>Beleza</th>
+                    <th>Fantasia</th>
+                    <th>Apresentação</th>
+                    <th>Total</th>
+                    <th>Comentário</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var candidata in Candidatas)
+                {
+                    var avaliacao = Avaliacoes.FirstOrDefault(a => a.CandidataIdenti == candidata.Id && a.UsuarioIdenti == usuarioSelecionado);
+                    <tr>
+                        <td>@candidata.Nome</td>
+                        <td>@(avaliacao != null ? avaliacao.NotaBeleza.ToString() : "")</td>
+                        <td>@(avaliacao != null ? avaliacao.NotaFantasia.ToString() : "")</td>
+                        <td>@(avaliacao != null ? avaliacao.NotaApresentacao.ToString() : "")</td>
+                        <td>@(avaliacao != null ? (avaliacao.NotaBeleza + avaliacao.NotaFantasia + avaliacao.NotaApresentacao).ToString() : "")</td>
+                        <td>@(avaliacao != null ? avaliacao.Comentario : "Nenhum comentário")</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+}
+else
+{
+    <p>Nenhuma candidata encontrada para este usuário.</p>
+}
+
+@code {
+    private List<string> Usuarios { get; set; }
+    private string usuarioSelecionado;
+    public IEnumerable<CandidataDto> Candidatas { get; set; }
+    public IEnumerable<AvaliacaoUsuarioDto> Avaliacoes { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        // Obter a lista de usuários
+        Usuarios = await loginService.GetUsers();
+
+        // Definir o usuário selecionado inicialmente como o primeiro da lista
+        usuarioSelecionado = Usuarios.FirstOrDefault() ?? "";
+
+        // Carregar dados iniciais
+        await LoadData();
+    }
+
+    private async Task LoadData()
+    {
+        // Obter as candidatas
+        Candidatas = await CandidataService.GetCandidates();
+
+        // Obter as avaliações do usuário selecionado
+        Avaliacoes = await AvaliacaoUsuarioService.GetAvaliacoesByUsuarioId(usuarioSelecionado);
+    }
+
+    private async Task ChangeUser(ChangeEventArgs e)
+    {
+        // Atualizar o usuário selecionado e recarregar os dados
+        usuarioSelecionado = e.Value.ToString(); // Convertendo para string
+        await LoadData();
+    }
+}

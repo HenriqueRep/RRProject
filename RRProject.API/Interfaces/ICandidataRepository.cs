@@ -1,5 +1,4 @@
 ﻿using RRProject.API.Entities;
-using RRProject.Models.DTOs;
 
 namespace RRProject.API.Interfaces
 {

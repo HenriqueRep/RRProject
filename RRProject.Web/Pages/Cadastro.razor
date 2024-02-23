@@ -1,0 +1,48 @@
+﻿@page "/cadastro"
+@using RRProject.Models.DTOs
+
+@inject IRegisterService registerService
+@inject NavigationManager navigationManager
+
+<h3>Cadastro</h3>
+
+@if (!IsRegistered)
+{
+    <div class="alert alert-danger" role="alert" style="display: @ErrorMessageDisplay">
+        @ErrorMessage
+    </div>
+
+    <input type="text" @bind="registerModel.Usuario" placeholder="Usuario" />
+    <br />
+    <input type="password" @bind="registerModel.Senha" placeholder="Password" />
+    <br />
+    <button @onclick="HandleRegister">Register</button>
+
+    <p>Se você já tem uma conta, <a href="/">clique aqui</a> para fazer o login.</p>
+}
+else
+{
+    <p>You have successfully registered.</p>
+}
+
+@code {
+    private UsuarioCadastroRequestDto registerModel = new UsuarioCadastroRequestDto();
+    private bool IsRegistered = false;
+    private string ErrorMessage = "";
+    private string ErrorMessageDisplay = "none";
+
+    private async Task HandleRegister()
+    {
+        var success = await registerService.Register(registerModel);
+        if (success)
+        {
+            IsRegistered = true;
+            navigationManager.NavigateTo("/login");
+        }
+        else
+        {
+            ErrorMessage = "Failed to register. Please try again later.";
+            ErrorMessageDisplay = "block";
+        }
+    }
+}

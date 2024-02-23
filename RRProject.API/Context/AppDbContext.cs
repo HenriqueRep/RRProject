@@ -9,79 +9,113 @@ namespace RRProject.API.Context
         {
         }
         public DbSet<Candidata> Candidatas { get; set; }
-        public DbSet<Usuario> Usuarios { get; set; }
+        public DbSet<AvaliacaoUsuario> Avaliacao { get; set; }      
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Candidata>().HasData(new Candidata
             {
                 Id = 1,
-                Nome = "Rayane Furtado",
-                Clube = "Paysandu",
-                ImagemUrl = "/Imagens/Candidatas/Paysandu.png"
+                Nome = "Fernanda Costa",
+                Clube = "Assembleia Paraense",
+                ImagemUrlclube = "/Imagens/Clubes/assembleia.png",
+                ImagemUrlcandidata = "/Imagens/Candidatas/assembleia.png"
             });
             modelBuilder.Entity<Candidata>().HasData(new Candidata
             {
                 Id = 2,
-                Nome = "Giovanna Cristinne Silva Picanço",
-                Clube = "Grêmio Literário e Recreativo Português",
-                ImagemUrl = "/Imagens/Candidatas/Grêmio Literário e Recreativo Português.png"
+                Nome = "Vitorya Carolyne",
+                Clube = "Bancrévea",
+                ImagemUrlclube = "/Imagens/Clubes/bancrevea.png",
+                ImagemUrlcandidata = "/Imagens/Candidatas/bancrevea.png"
             });
             modelBuilder.Entity<Candidata>().HasData(new Candidata
             {
                 Id = 3,
-                Nome = "Isadora Andrade Rêgo",
-                Clube = "Assembleia Paraense",
-                ImagemUrl = "/Imagens/Candidatas/Assembléia Paraense.png"
+                Nome = "Letícia Moraes",
+                Clube = "Casota",
+                ImagemUrlclube = "/Imagens/Clubes/casota.png",
+                ImagemUrlcandidata = "/Imagens/Candidatas/casota.png"
             });
             modelBuilder.Entity<Candidata>().HasData(new Candidata
             {
                 Id = 4,
-                Nome = "Érica Venise da Silva Pinto",
-                Clube = "Bancrévea",
-                ImagemUrl = "/Imagens/Candidatas/Bancrévea.png"
+                Nome = "Natália Leão",
+                Clube = "Cassazum",
+                ImagemUrlclube = "/Imagens/Clubes/cassazum.png",
+                ImagemUrlcandidata = "/Imagens/Candidatas/cassazum.png"
             });
             modelBuilder.Entity<Candidata>().HasData(new Candidata
             {
                 Id = 5,
-                Nome = "Aline Carla Rodrigues Wanderley",
-                Clube = "Guará Acqua Park",
-                ImagemUrl = "/Imagens/Candidatas/Guará Acqua Park.png"
+                Nome = "Heloysa Rodrigues",
+                Clube = "Clube de Engenharia",
+                ImagemUrlclube = "/Imagens/Clubes/engenharia.png",
+                ImagemUrlcandidata = "/Imagens/Candidatas/engenharia.png"
             });
             modelBuilder.Entity<Candidata>().HasData(new Candidata
             {
                 Id = 6,
-                Nome = "Ádria Mayara Pantoja Nogueira",
-                Clube = "ASALP",
-                ImagemUrl = "/Imagens/Candidatas/ASALP.png"
+                Nome = "Gabrielle Costa",
+                Clube = "Clube do Remo",
+                ImagemUrlclube = "/Imagens/Clubes/remo.png",
+                ImagemUrlcandidata = "/Imagens/Candidatas/remo.png"
             });
             modelBuilder.Entity<Candidata>().HasData(new Candidata
             {
                 Id = 7,
-                Nome = "Janaína Pontes Ferreira",
-                Clube = "Tuna Luso Brasileira ",
-                ImagemUrl = "/Imagens/Candidatas/Tuna Luso Brasileira.png"
+                Nome = "Lídia Negrão",
+                Clube = "Clube dos Advogado",
+                ImagemUrlclube = "/Imagens/Clubes/oab.png",
+                ImagemUrlcandidata = "/Imagens/Candidatas/oab.png"
             });
             modelBuilder.Entity<Candidata>().HasData(new Candidata
             {
                 Id = 8,
-                Nome = "Ana de Nazaré Martins Barbosa",
-                Clube = "Tênis Clube do Pará",
-                ImagemUrl = "/Imagens/Candidatas/Tênis Clube.png"
+                Nome = "Ana Karina",
+                Clube = "Grêmio Português ",
+                ImagemUrlclube = "/Imagens/Clubes/gremio.png",
+                ImagemUrlcandidata = "/Imagens/Candidatas/gremio.png"
             });
             modelBuilder.Entity<Candidata>().HasData(new Candidata
             {
                 Id = 9,
-                Nome = "Adriana dos Santos Pinheiro",
-                Clube = "Clube do Remo",
-                ImagemUrl = "/Imagens/Candidatas/Clube do Remo.png"
+                Nome = "Giselly Geise",
+                Clube = "Acqua Park",
+                ImagemUrlclube = "/Imagens/Clubes/guara.png",
+                ImagemUrlcandidata = "/Imagens/Candidatas/guara.png"
             });
             modelBuilder.Entity<Candidata>().HasData(new Candidata
             {
                 Id = 10,
-                Nome = "Monã Rita Vianna de Oliveira",
-                Clube = "Iate Clube de Santarém",
-                ImagemUrl = "/Imagens/Candidatas/Iate Clube de Santarém.png"
+                Nome = "Evelyn Moreira",
+                Clube = "Pará Clube",
+                ImagemUrlclube = "/Imagens/Clubes/clubepara.png",
+                ImagemUrlcandidata = "/Imagens/Candidatas/clubepara.png"
+            });
+            modelBuilder.Entity<Candidata>().HasData(new Candidata
+            {
+                Id = 11,
+                Nome = "Tais Malato",
+                Clube = "Paysandu",
+                ImagemUrlclube = "/Imagens/Clubes/paysandu.png",
+                ImagemUrlcandidata = "/Imagens/Candidatas/paysandu.png"
+            });
+            modelBuilder.Entity<Candidata>().HasData(new Candidata
+            {
+                Id = 12,
+                Nome = "Ana Maria Marques",
+                Clube = "Tênis Clube",
+                ImagemUrlclube = "/Imagens/Clubes/tenis.png",
+                ImagemUrlcandidata = "/Imagens/Candidatas/tenis.png"
+            });
+            modelBuilder.Entity<Candidata>().HasData(new Candidata
+            {
+                Id = 13,
+                Nome = "Ingrid Kácia",
+                Clube = "Tuna Luso",
+                ImagemUrlclube = "/Imagens/Clubes/tuna.png",
+                ImagemUrlcandidata = "/Imagens/Candidatas/tuna.png"
             });
         }
     }

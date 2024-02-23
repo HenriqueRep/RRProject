@@ -1,0 +1,105 @@
+﻿@page "/ClassificacaoIndividual"
+@using RRProject.Models.DTOs
+@inject ICandidataService CandidataService
+@inject IAvaliacaoUsuarioService AvaliacaoUsuarioService
+@inject Microsoft.JSInterop.IJSRuntime JSRuntime
+@inject NavigationManager NavigationManager
+
+<div class="container">
+    <h3 class="titulo">Sua avaliação das Candidatas</h3>
+</div>
+
+<div class="table-responsive">
+    <table class="cinereousTable">
+        <thead>
+            <tr>
+                <th>Editar</th>
+                <th>Nome</th>
+                <th>Bele</th>
+                <th>Fanta</th>
+                <th>Apre</th>
+                <th>Total</th>
+                <th>Comentário</th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (Candidatas != null && Candidatas.Any())
+            {
+                @foreach (var candidata in Candidatas.OrderByDescending(c => GetTotalAvaliacao(c.Id)))
+                {
+                    var avaliacao = Avaliacoes.FirstOrDefault(a => a.CandidataIdenti == candidata.Id);
+                    <tr>
+                        <td>
+                            <button class="btn btn-primary" @onclick="(() => EditarCandidata(candidata.Id))"
+                                    disabled="@((avaliacao == null) || (avaliacao.NotaBeleza == null) || (avaliacao.NotaFantasia == null)
+                                                || (avaliacao.NotaApresentacao == null) || string.IsNullOrEmpty(avaliacao.Comentario))">
+                                <span class="bi-floppy-fill-nav-menu"></span>
+                            </button>
+                        </td>
+                        <td>@candidata.Nome</td>
+                        <td>@(avaliacao?.NotaBeleza ?? 0)</td>
+                        <td>@(avaliacao?.NotaFantasia ?? 0)</td>
+                        <td>@(avaliacao?.NotaApresentacao ?? 0)</td>
+                        <td>@(avaliacao?.NotaBeleza + avaliacao?.NotaFantasia + avaliacao?.NotaApresentacao ?? 0)</td>
+                        <td class="largura-especifica">@(avaliacao?.Comentario ?? "Nenhum comentário")</td>
+                    </tr>
+                }
+            }
+            else
+            {
+                <tr>
+                    <td colspan="6">Nenhuma candidata encontrada.</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+@code {
+    public IEnumerable<CandidataDto> Candidatas { get; set; }
+    public List<AvaliacaoUsuarioDto> Avaliacoes { get; set; }
+    public UsuarioLoginResponseDto Usuario { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        // Obter candidatas
+        Candidatas = await CandidataService.GetCandidates();
+
+        // Obter avaliações do usuário logado
+        await CarregarUsuario();
+        Avaliacoes = await AvaliacaoUsuarioService.GetAvaliacoesByUsuarioId(Usuario.ID);
+    }
+
+    private async Task CarregarUsuario()
+    {
+        // Recuperar ID do usuário do armazenamento local usando JavaScript interop
+        var id = await JSRuntime.InvokeAsync<string>("localStorage.getItem", "id");
+        var usuario = await JSRuntime.InvokeAsync<string>("localStorage.getItem", "usuario");
+
+        if (!string.IsNullOrEmpty(id) && !string.IsNullOrEmpty(usuario))
+        {
+            // Criar objeto UsuarioLoginResponseDto se as informações forem encontradas
+            Usuario = new UsuarioLoginResponseDto
+                {
+                    ID = id,
+                    Usuario = usuario
+                };
+        }
+        else
+        {
+            // Lidar com o caso em que as informações do usuário não são encontradas
+        }
+    }
+
+    private int GetTotalAvaliacao(int candidataId)
+    {
+        var avaliacao = Avaliacoes.FirstOrDefault(a => a.CandidataIdenti == candidataId);
+        return avaliacao?.NotaBeleza + avaliacao?.NotaFantasia + avaliacao?.NotaApresentacao ?? 0;
+    }
+
+
+    private void EditarCandidata(int candidataId)
+    {
+        NavigationManager.NavigateTo($"/EditarCandidata/{Usuario.ID}/{candidataId}");
+    }
+}
